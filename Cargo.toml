@@ -1,0 +1,22 @@
+[package]
+name = "nonblocking"
+version = "0.1.0" # change with html_root_url in lib.rs
+edition = "2021"
+authors = ["nomissbowling <nomissbowling@yahoo.co.jp>"]
+
+description = "nonblocking stdin crate for Rust"
+keywords = ["nonblocking", "stdin", "crossterm"]
+categories = ["development-tools", "asynchronous", "concurrency"]
+license = "MIT"
+
+documentation = "https://docs.rs/nonblocking/"
+homepage = "https://crates.io/crates/nonblocking"
+repository = "https://github.com/nomissbowling/nonblocking"
+
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+crossterm = "0.26.1"
+crossbeam-channel = "0.5.8"
