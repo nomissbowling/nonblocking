@@ -17,6 +17,7 @@ pub struct NbStdin {
   reader: EventStream
 }
 
+/// NbStdin
 impl NbStdin {
 
 /// constructor
