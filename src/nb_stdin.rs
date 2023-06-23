@@ -63,7 +63,8 @@ pub async fn async_stdin(&mut self, lambda: fn (e: Event) -> bool) -> Result<boo
 }
 
 /// select async-await
-pub async fn select_stdin() -> Result<Option<Event>, Box<dyn Error>> {
+pub async fn select_stdin(timeout: time::Duration) -> Result<Option<Event>, Box<dyn Error>> {
+  let now = time::Instant::now();
   let mut reader = EventStream::new();
   loop {
     let c = reader.next().fuse();
@@ -77,7 +78,9 @@ pub async fn select_stdin() -> Result<Option<Event>, Box<dyn Error>> {
         }
       },
       complete => break,
-      default => break // or () to block in the loop or unreachable!()
+      default => {
+        if now.elapsed() < timeout { () } else { break; } // or unreachable!()
+      }
     }
   }
   Ok(None)
@@ -88,7 +91,7 @@ pub fn async_non_blocking_stdin(timeout: time::Duration, lambda: fn (e: Event) -
   let (tx, rx) = mpsc::channel();
   let _handle = thread::spawn(move || {
     loop {
-      match block_on(NbStdin::select_stdin()).unwrap() { // blocking
+      match block_on(NbStdin::select_stdin(timeout)).unwrap() { // blocking
       None => (),
       Some(e) => {
         match tx.send(e) {
